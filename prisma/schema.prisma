@@ -1,0 +1,64 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  createdAt    DateTime @default(now())
+  referralCode String   @unique
+
+  // A user can send many invites
+  invitesSent Invite[] @relation("InviterInvites")
+
+  // A user can be the inviter for many referrals
+  inviterReferrals Referral[] @relation("InviterReferrals")
+
+  // A user can be referred at most once (inverse of Referral.signupUser)
+  signupReferral Referral? @relation("SignupReferral")
+}
+
+model Invite {
+  id        String @id @default(cuid())
+  inviterId String
+  inviter   User   @relation("InviterInvites", fields: [inviterId], references: [id], onDelete: Cascade)
+
+  email      String
+  token      String       @unique
+  status     InviteStatus @default(SENT)
+  createdAt  DateTime     @default(now())
+  acceptedAt DateTime?
+
+  // One invite can produce at most one referral (inverse lives on Referral.invite)
+  referral Referral?
+}
+
+model Referral {
+  id String @id @default(cuid())
+
+  // who did the inviting
+  inviterId String
+  inviter   User   @relation("InviterReferrals", fields: [inviterId], references: [id], onDelete: Cascade)
+
+  // who signed up (each signup user can only have one referral)
+  signupUserId String @unique
+  signupUser   User   @relation("SignupReferral", fields: [signupUserId], references: [id], onDelete: Cascade)
+
+  // optional link to the invite row used — one-to-one, so FK must be unique
+  inviteId String? @unique
+  invite   Invite? @relation(fields: [inviteId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+enum InviteStatus {
+  SENT
+  ACCEPTED
+}
