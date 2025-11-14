@@ -1,8 +1,11 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
+import { useRouter } from 'next/navigation';
+import { Form, TextField, Button } from '@adobe/react-spectrum';
 
 export default function InviteForm() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
@@ -34,6 +37,8 @@ export default function InviteForm() {
           text: `Invite sent to ${data.invite.email}! Share this link: ${data.inviteUrl}`,
         });
         setEmail('');
+        // Refresh the dashboard to update metrics and recent invites
+        router.refresh();
       }
     } catch (error) {
       setMessage({
@@ -48,24 +53,24 @@ export default function InviteForm() {
   return (
     <div>
       <h2>Invite Friends</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="invite-email">Email Address</label>
-          <input
-            type="email"
-            id="invite-email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            disabled={loading}
-            placeholder="friend@example.com"
-          />
-        </div>
+      <div>
+        <Form onSubmit={handleSubmit}>
+            <div>      
+                <TextField
+                    label="Email Address"
+                    value={email}
+                    onChange={(value) => setEmail(value)}
+                    isDisabled={loading}
+                />
+            </div>
 
-        <button type="submit" disabled={loading}>
-          {loading ? 'Sending...' : 'Send Invite'}
-        </button>
-      </form>
+            <div>
+                <Button variant="cta" type="submit" isDisabled={loading}>
+                    {loading ? 'Sending...' : 'Send Invite'}
+                </Button>
+            </div>
+        </Form>
+      </div>
 
       {message && (
         <div>

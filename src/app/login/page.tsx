@@ -3,6 +3,8 @@
 import { useState, FormEvent } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Form, TextField, Button } from '@adobe/react-spectrum';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -37,51 +39,52 @@ export default function LoginPage() {
   };
 
   return (
-    <main>
-      <h1>Log In</h1>
-      <p>Sign in to your account to access your dashboard.</p>
-
-      {error && (
+      <main>
         <div>
-          <p>{error}</p>
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email Address</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            disabled={loading}
-            placeholder="you@example.com"
-          />
+          <h1>Log In</h1>
+          <p>Sign in to your account to access your dashboard.</p>
         </div>
 
+        {error && (
+          <div>
+            <p>{error}</p>
+          </div>
+        )}
+
         <div>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            disabled={loading}
-          />
+          <Form onSubmit={handleSubmit}>
+            <div>
+              <TextField
+                label="Email"
+                value={email}
+                onChange={(value) => setEmail(value)}
+                isDisabled={loading}
+              />
+            </div>
+
+            <div>
+              <TextField
+                label="Password"
+                type="password"
+                value={password}
+                onChange={(value) => setPassword(value)}
+                isDisabled={loading}
+                minLength={6}
+              />
+            </div>
+            
+            <div>
+              <Button variant="cta" type="submit" isDisabled={loading}>
+                {loading ? 'Signing In...' : 'Log In'}
+              </Button>
+            </div>
+          </Form>
         </div>
 
-        <button type="submit" disabled={loading}>
-          {loading ? 'Signing In...' : 'Log In'}
-        </button>
-      </form>
-
-      <div>
-        <p>Don't have an account? <a href="/signup">Sign up</a></p>
-      </div>
-    </main>
+        <div>
+          <p>Don't have an account? <Link href="/signup">Sign up</Link></p>
+        </div>
+      </main>
   );
 }
 

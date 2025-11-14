@@ -12,9 +12,11 @@
     "lint": "next lint",
     "test": "vitest run",
     "test:ui": "vitest --ui",
-    "prisma:studio": "prisma studio"
+    "prisma:studio": "prisma studio",
+    "db:reset": "rm -f prisma/dev.db prisma/dev.db-journal && pnpm prisma migrate deploy && pnpm prisma generate"
   },
   "dependencies": {
+    "@adobe/react-spectrum": "^3.45.0",
     "@auth/prisma-adapter": "^2.11.1",
     "@prisma/client": "^6.19.0",
     "bcrypt": "^6.0.0",

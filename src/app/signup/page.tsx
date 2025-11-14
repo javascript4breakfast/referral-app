@@ -1,17 +1,41 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
+import { Form, TextField, Button } from '@adobe/react-spectrum';
+import Link from 'next/link';
 
 export default function SignupPage() {
   const searchParams = useSearchParams();
-  const ref = searchParams.get('ref');
-
+  const urlRef = searchParams.get('ref');
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [referralCode, setReferralCode] = useState(urlRef || '');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [signupSuccess, setSignupSuccess] = useState(false);
+
+  const handleRedirect = async () => {
+    // Automatically sign in the user after signup
+    const result = await signIn('credentials', {
+      email,
+      password,
+      redirect: false,
+    });
+
+    if (result?.ok) {
+      router.push('/dashboard');
+      router.refresh();
+    } else {
+      // If auto-login fails, redirect to login page
+      router.push('/login');
+    }
+  };
+
+  // Use URL ref if available, otherwise use manual input
+  const ref = urlRef || (referralCode.trim() || undefined);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -41,14 +65,13 @@ export default function SignupPage() {
       } else {
         setMessage({
           type: 'success',
-          text: `Success! Your account has been created. Your referral code is: ${data.user.referralCode}. Redirecting to login...`,
+          text: `Success! Your account has been created. Your referral code is: ${data.user.referralCode}. Redirecting to dashboard...`,
         });
         setSignupSuccess(true);
-        setEmail('');
-        setPassword('');
-        // Redirect to login after 2 seconds
+        // Store email and password for auto-login (don't clear yet)
+        // Redirect to dashboard after 2 seconds
         setTimeout(() => {
-          window.location.href = '/login';
+          handleRedirect();
         }, 2000);
       }
     } catch (error) {
@@ -61,82 +84,89 @@ export default function SignupPage() {
     }
   };
 
+  if (signupSuccess) {
+    return (
+      <main>
+        <div>
+          <p>Redirecting to dashboard...</p>
+        </div>
+      </main>
+    );
+  }
+
   return (
-    <main>
-      <h1>Sign Up</h1>
-      <p>
-        Create your account to start inviting friends and earning referrals.
-      </p>
+      <main>
+        {urlRef && (
+            <div>
+                <p>
+                    🎉 You were referred by someone!
+                </p>
+                <p>
+                    Use code: <code>{urlRef}</code>
+                </p>
+            </div>
+        )}
 
-      {ref && (
         <div>
+          <h1>Sign Up</h1>
           <p>
-            🎉 You were referred by someone!
-          </p>
-          <p>
-            Use code: <code>{ref}</code>
+            Create your account to start inviting friends and earning referrals.
           </p>
         </div>
-      )}
 
-      {message && (
+        {message && (
+            <div>
+                <p>{message.text}</p>
+            </div>
+        )}
+
         <div>
-          <p>{message.text}</p>
+            <Form onSubmit={handleSubmit}>
+                <div>
+                    <TextField
+                        label="Email"
+                        value={email}
+                        onChange={(value) => setEmail(value)}
+                        isDisabled={loading}
+                    />
+                </div>
+
+                <div>
+                    <TextField
+                        label="Password"
+                        value={password}
+                        type="password"
+                        onChange={(value) => setPassword(value)}
+                        isDisabled={loading}
+                        minLength={6}
+                    />
+                </div>
+
+                <div>
+                    <TextField
+                        label="Referral Code (Optional)"
+                        value={referralCode}
+                        onChange={(value) => setReferralCode(value)}
+                        isDisabled={loading || !!urlRef}
+                    />
+                    {urlRef && (
+                    <p style={{ fontSize: 12, marginTop: 4 }}>
+                        Referral code is already set from the link.
+                    </p>
+                    )}
+                </div>
+                <div>
+                    <Button variant="cta" type="submit" isDisabled={loading}>
+                        {loading ? 'Creating Account...' : 'Sign Up'}
+                    </Button>
+                </div>
+            </Form>
         </div>
-      )}
-
-      {!signupSuccess && (
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="email">
-              Email Address
-            </label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              disabled={loading}
-              placeholder="you@example.com"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="password">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              disabled={loading}
-              placeholder="At least 6 characters"
-              minLength={6}
-            />
-          </div>
-
-          <button type="submit" disabled={loading}>
-            {loading ? 'Creating Account...' : 'Sign Up'}
-          </button>
-        </form>
-      )}
-
-      {signupSuccess && (
+       
         <div>
-          <p>Redirecting to login...</p>
-          <a href="/login">
-            Go to Login
-          </a>
+            <p>Already have an account? <Link href="/login">Log in</Link></p>
         </div>
-      )}
-
-      <div>
-        <p>Already have an account? <a href="/login">Log in</a></p>
-      </div>
-    </main>
+      </main>
   );
 }
 
