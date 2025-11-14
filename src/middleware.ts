@@ -1,10 +1,21 @@
 // src/middleware.ts
-import type { NextRequest } from 'next/server';
+import { withAuth } from 'next-auth/middleware';
 import { NextResponse } from 'next/server';
 
-export function middleware(_req: NextRequest) {
-  return NextResponse.next();
-}
+export default withAuth(
+  function middleware(req) {
+    return NextResponse.next();
+  },
+  {
+    callbacks: {
+      authorized: ({ token }) => !!token,
+    },
+    pages: {
+      signIn: '/login',
+    },
+  }
+);
 
-// Only run on protected paths once you add auth
-export const config = { matcher: ['/dashboard/:path*'] };
+export const config = {
+  matcher: ['/dashboard/:path*', '/api/invites/:path*'],
+};
