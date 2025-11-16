@@ -145,10 +145,17 @@ export async function POST(req: Request) {
           { status: 409 }
         );
       }
+      // Log the specific Prisma error code for debugging
+      console.error('Prisma error code:', error.code, 'Message:', error.message);
     }
 
+    // Return more detailed error in non-production for debugging
+    const errorMessage = process.env.NODE_ENV === 'production' 
+      ? 'Failed to create account'
+      : `Failed to create account: ${error instanceof Error ? error.message : 'Unknown error'}`;
+
     return NextResponse.json(
-      { error: 'Failed to create account' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

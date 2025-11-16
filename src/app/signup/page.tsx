@@ -1,14 +1,15 @@
 'use client';
 
-import { useState, FormEvent, Suspense } from 'react';
+import { useState, FormEvent, Suspense, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { Form, TextField, Button } from '@adobe/react-spectrum';
 import Link from 'next/link';
 import RedirectLoader from '@/components/RedirectLoader';
 import styles from './signup.module.css';
 
 function SignupForm() {
+  const { data: session, status } = useSession();
   const searchParams = useSearchParams();
   const urlRef = searchParams.get('ref');
   const router = useRouter();
@@ -18,6 +19,13 @@ function SignupForm() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [signupSuccess, setSignupSuccess] = useState(false);
+
+  // Redirect authenticated users to dashboard
+  useEffect(() => {
+    if (status === 'authenticated') {
+      router.push('/dashboard');
+    }
+  }, [status, router]);
 
   const handleRedirect = async () => {
     // Automatically sign in the user after signup
@@ -86,6 +94,12 @@ function SignupForm() {
     }
   };
 
+  // Show loading while checking authentication
+  if (status === 'loading') {
+    return <RedirectLoader />;
+  }
+
+  // Show loading during signup success
   if (signupSuccess) {
     return (
       <RedirectLoader />

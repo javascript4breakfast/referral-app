@@ -1,18 +1,27 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
-import { signIn } from 'next-auth/react';
+import { useState, FormEvent, useEffect } from 'react';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Form, TextField, Button } from '@adobe/react-spectrum';
+import RedirectLoader from '@/components/RedirectLoader';
 import styles from './login.module.css';
 
 export default function LoginPage() {
+  const { status } = useSession();
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Redirect authenticated users to dashboard
+  useEffect(() => {
+    if (status === 'authenticated') {
+      router.push('/dashboard');
+    }
+  }, [status, router]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -38,6 +47,11 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
+
+  // Show loading while checking authentication
+  if (status === 'loading') {
+    return <RedirectLoader />;
+  }
 
   return (
       <main>
