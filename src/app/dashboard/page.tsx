@@ -56,7 +56,8 @@ export default async function Dashboard() {
     );
   }
 
-  const referralUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/signup?ref=${currentUser.referralCode}`;
+  const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000').replace(/\/$/, '');
+  const referralUrl = `${baseUrl}/signup?ref=${currentUser.referralCode}`;
   const totalSignups = currentUser.inviterReferrals.length;
   const totalInvites = currentUser.invitesSent.length;
   

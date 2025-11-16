@@ -60,7 +60,8 @@ export async function POST(req: Request) {
     });
 
     // Send email with invite link
-    const inviteUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/signup?ref=${inviter.referralCode}`;
+    const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000').replace(/\/$/, '');
+    const inviteUrl = `${baseUrl}/signup?ref=${inviter.referralCode}`;
     
     const emailResult = await sendInviteEmail({
       to: normalizedEmail,
