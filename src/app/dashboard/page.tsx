@@ -77,8 +77,6 @@ export default async function Dashboard() {
 
   const referredEmails = currentUser.inviterReferrals.map((referral) => referral.signupUser);
 
-  console.log('referralConversionRate', referralConversionRate);
-
   return (
     <main className={styles.dashboardPageWrapper}>
       <div>
@@ -98,8 +96,6 @@ export default async function Dashboard() {
             <p>Share this link to invite friends and earn referrals!</p>
           </div>
         </div>
-
-
         <div className={styles.dashboardInsightsWrapper}>
           <div>
             <Metrics totalInvites={totalInvites} acceptedInvites={acceptedInvites} totalSignups={totalSignups} conversionRate={conversionRate} referralConversionRate={referralConversionRate} />
