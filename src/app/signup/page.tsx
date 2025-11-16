@@ -109,7 +109,7 @@ function SignupForm() {
   return (
       <main>
         {urlRef && (
-            <div>
+            <div className={styles.signupReferralMessage}>
                 <p>
                     🎉 You were referred by someone!
                 </p>

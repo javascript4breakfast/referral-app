@@ -15,6 +15,16 @@
     margin: 0 auto;
 }
 
+.signupReferralMessage {
+    padding: 1rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    min-width: 50vw;
+    margin: 0 auto;
+}
+
 .signupFormButton {
     padding: 1rem 0;
     display: flex;
