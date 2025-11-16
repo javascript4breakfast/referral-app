@@ -1,6 +1,7 @@
 'use client';
 
 import { signOut } from 'next-auth/react';
+import { ActionButton } from '@adobe/react-spectrum';
 
 export default function SignOutButton() {
   const handleSignOut = async () => {
@@ -8,9 +9,9 @@ export default function SignOutButton() {
   };
 
   return (
-    <button onClick={handleSignOut} type="button">
+    <ActionButton onPress={handleSignOut} isQuiet>
       Sign Out
-    </button>
+    </ActionButton>
   );
 }
 

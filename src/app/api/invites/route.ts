@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { nanoid } from 'nanoid';
+import { sendInviteEmail } from '@/lib/email';
 
 export async function POST(req: Request) {
   try {
@@ -58,8 +59,19 @@ export async function POST(req: Request) {
       },
     });
 
-    // TODO: Send email with invite link
+    // Send email with invite link
     const inviteUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/signup?ref=${inviter.referralCode}`;
+    
+    const emailResult = await sendInviteEmail({
+      to: normalizedEmail,
+      inviterName: inviter.name || inviter.email,
+      inviteUrl,
+    });
+
+    if (!emailResult.success) {
+      console.warn('Email sending failed, but invite was created:', emailResult.error);
+      // Continue anyway - invite is created, user can still get the link from the UI
+    }
 
     return NextResponse.json({
       success: true,
@@ -70,6 +82,7 @@ export async function POST(req: Request) {
         status: invite.status,
       },
       inviteUrl,
+      emailSent: emailResult.success,
     });
   } catch (error) {
     console.error('Invite creation error:', error);

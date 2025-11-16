@@ -1,0 +1,45 @@
+.navbar {
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--background);
+  border-bottom: 1px solid var(--foreground);
+}
+
+.container {
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: var(--foreground);
+}
+
+.logo h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.navLinks {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.navLinks a {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  text-decoration: none;
+  color: var(--foreground);
+  transition: background-color 0.2s ease;
+}
+
+.navLinks a:hover {
+  background-color: rgba(128, 128, 128, 0.1);
+}
+

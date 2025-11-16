@@ -3,6 +3,7 @@
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { Form, TextField, Button } from '@adobe/react-spectrum';
+import styles from './styles/invite-form.module.css';
 
 export default function InviteForm() {
   const router = useRouter();
@@ -32,9 +33,18 @@ export default function InviteForm() {
           text: data.error || 'Failed to send invite',
         });
       } else {
+        // Build success message based on email delivery status
+        let successText = `✅ Invite created for ${data.invite.email}!`;
+        
+        if (data.emailSent) {
+          successText += ' 📧 Email sent with your referral link.';
+        } else {
+          successText += ` Share this link: ${data.inviteUrl}`;
+        }
+        
         setMessage({
           type: 'success',
-          text: `Invite sent to ${data.invite.email}! Share this link: ${data.inviteUrl}`,
+          text: successText,
         });
         setEmail('');
         // Refresh the dashboard to update metrics and recent invites
@@ -51,29 +61,27 @@ export default function InviteForm() {
   };
 
   return (
-    <div>
+    <div className={styles.inviteFormWrapper}>
       <h2>Invite Friends</h2>
-      <div>
         <Form onSubmit={handleSubmit}>
-            <div>      
-                <TextField
-                    label="Email Address"
-                    value={email}
-                    onChange={(value) => setEmail(value)}
-                    isDisabled={loading}
-                />
-            </div>
-
-            <div>
+          <div className={styles.inviteFormFieldsWrapper}>
+              <TextField
+                  label="Email Address"
+                  value={email}
+                  onChange={(value) => setEmail(value)}
+                  isDisabled={loading}
+                  width="100%"
+              />
+              <div className={styles.inviteFormButtonWrapper}>
                 <Button variant="cta" type="submit" isDisabled={loading}>
-                    {loading ? 'Sending...' : 'Send Invite'}
+                  {loading ? 'Sending...' : 'Send Invite'}
                 </Button>
-            </div>
+              </div>
+          </div>
         </Form>
-      </div>
 
       {message && (
-        <div>
+        <div className={message.type === 'success' ? styles.successMessage : styles.errorMessage}>
           <p>{message.text}</p>
         </div>
       )}

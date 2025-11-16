@@ -1,12 +1,14 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { Form, TextField, Button } from '@adobe/react-spectrum';
 import Link from 'next/link';
+import RedirectLoader from '@/components/RedirectLoader';
+import styles from './signup.module.css';
 
-export default function SignupPage() {
+function SignupForm() {
   const searchParams = useSearchParams();
   const urlRef = searchParams.get('ref');
   const router = useRouter();
@@ -86,11 +88,7 @@ export default function SignupPage() {
 
   if (signupSuccess) {
     return (
-      <main>
-        <div>
-          <p>Redirecting to dashboard...</p>
-        </div>
-      </main>
+      <RedirectLoader />
     );
   }
 
@@ -107,66 +105,64 @@ export default function SignupPage() {
             </div>
         )}
 
-        <div>
+        <div className={styles.signupPageTitle}>
           <h1>Sign Up</h1>
           <p>
             Create your account to start inviting friends and earning referrals.
           </p>
         </div>
 
-        {message && (
-            <div>
-                <p>{message.text}</p>
-            </div>
-        )}
 
-        <div>
+        <div className={styles.signupFormWrapper}>
+            {message && (
+                <div className={styles.signupMessage}>
+                    <p>{message.text}</p>
+                </div>
+            )}
             <Form onSubmit={handleSubmit}>
-                <div>
-                    <TextField
-                        label="Email"
-                        value={email}
-                        onChange={(value) => setEmail(value)}
-                        isDisabled={loading}
-                    />
-                </div>
-
-                <div>
-                    <TextField
-                        label="Password"
-                        value={password}
-                        type="password"
-                        onChange={(value) => setPassword(value)}
-                        isDisabled={loading}
-                        minLength={6}
-                    />
-                </div>
-
-                <div>
-                    <TextField
-                        label="Referral Code (Optional)"
-                        value={referralCode}
-                        onChange={(value) => setReferralCode(value)}
-                        isDisabled={loading || !!urlRef}
-                    />
-                    {urlRef && (
-                    <p style={{ fontSize: 12, marginTop: 4 }}>
-                        Referral code is already set from the link.
-                    </p>
-                    )}
-                </div>
-                <div>
+                <TextField
+                    label="Email"
+                    value={email}
+                    onChange={(value) => setEmail(value)}
+                    isDisabled={loading}
+                />
+                <TextField
+                    label="Password"
+                    value={password}
+                    type="password"
+                    onChange={(value) => setPassword(value)}
+                    isDisabled={loading}
+                    minLength={6}
+                />
+                <TextField
+                    label="Referral Code (Optional)"
+                    value={referralCode}
+                    onChange={(value) => setReferralCode(value)}
+                    isDisabled={loading || !!urlRef}
+                    description={urlRef ? "Referral code is already set from the link." : undefined}
+                />
+                <div className={styles.signupFormButton}>
+                  <div>
+                      <p>Already have an account? <Link href="/login">Log in</Link></p>
+                  </div>
+                  <div>
                     <Button variant="cta" type="submit" isDisabled={loading}>
                         {loading ? 'Creating Account...' : 'Sign Up'}
                     </Button>
+                  </div>
                 </div>
             </Form>
         </div>
        
-        <div>
-            <p>Already have an account? <Link href="/login">Log in</Link></p>
-        </div>
+       
       </main>
   );
 }
 
+export default function SignupPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignupForm />
+    </Suspense>
+  );
+}

@@ -43,8 +43,24 @@ Prerequisites: Node.js 18+, `pnpm`, and SQLite (bundled with most Node installs)
    pnpm dev
       The app runs at `http://localhost:3000`.
 
-## Available Scripts
+## Email Configuration
 
+The app uses [Resend](https://resend.com) for sending invitation emails. Email functionality works in two modes:
+
+### Development Mode (Default)
+Without an API key, emails are logged to the console instead of being sent. This is perfect for development and testing.
+
+### Production Mode
+To send real emails, add these environment variables to your `.env` file:
+
+```bash
+RESEND_API_KEY="re_your_api_key_here"
+RESEND_FROM_EMAIL="noreply@yourdomain.com"
+```
+
+Get your API key by signing up at [resend.com](https://resend.com). You'll need to verify your sending domain to send emails in production.
+
+## Available Scripts
 
 - `pnpm dev` – Start Next.js in development mode.
 - `pnpm build` / `pnpm start` – Produce and serve a production build.

@@ -1,18 +1,20 @@
 'use client';
 
 import { useTheme } from '@/contexts/ThemeContext';
+import { ActionButton } from '@adobe/react-spectrum';
+
 
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <button
-      onClick={toggleTheme}
-      type="button"
+    <ActionButton
+      isQuiet
+      onPress={toggleTheme}
       aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
     >
-      {theme === 'light' ? '🌙' : '☀️'} {theme === 'light' ? 'Dark' : 'Light'}
-    </button>
+      {theme === 'dark' ? '🌙' : '☀️'}
+    </ActionButton>
   );
 }
 

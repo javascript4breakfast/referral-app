@@ -1,0 +1,42 @@
+.loginFormWrapper {
+    padding: 1rem 0;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr;
+    align-content: center;
+    justify-content: center;
+    min-width: 50vw;
+    margin: 0 auto;
+}
+
+.loginPageTitle {
+    padding-top: 2rem;
+    min-width: 50vw;
+    margin: 0 auto;
+}
+.loginMessage {
+    text-transform: capitalize;
+    color: red;
+}
+.loginFormButton {
+    padding: 1rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.loginFormButton p {
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+}
+
+@media (max-width: 768px) {
+    .loginPageTitle {
+        min-width: 90vw;
+    }
+    .loginFormWrapper {
+        min-width: 90vw;
+    }
+}

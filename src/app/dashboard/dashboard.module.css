@@ -1,0 +1,217 @@
+.dashboardPageWrapper {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboardPageWrapper > div:first-child {
+    margin-bottom: 2rem;
+}
+
+.dashboardPageWrapper h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.dashboardPageWrapper > div:first-child p {
+    font-size: 1.1rem;
+    opacity: 0.8;
+}
+
+.dashboardGridWrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+.dashboardInviteFormWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.dashboardInviteFormWrapper > div {
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboardInviteFormWrapper > div:hover {
+    transform: translateY(-2px);
+}
+
+.dashboardInviteFormWrapper h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.dashboardInviteFormWrapper code {
+    display: block;
+    border-radius: 8px;
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-size: 0.9rem;
+    word-break: break-all;
+    margin: 0.75rem 0;
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+    background: transparent;
+}
+
+.dashboardInviteFormWrapper p {
+    font-size: 0.95rem;
+    opacity: 0.8;
+    margin-top: 0.5rem;
+}
+
+.dashboardInsightsWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.dashboardInsightsWrapper > div {
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.dashboardInsightsWrapper h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.dashboardInsightsWrapper ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dashboardInsightsWrapper li {
+    border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+    transition: background-color 0.2s ease;
+}
+
+.dashboardInsightsWrapper li:last-child {
+    border-bottom: none;
+}
+
+.dashboardInsightsWrapper li:hover {
+    background: var(--hover-bg, rgba(255, 255, 255, 0.03));
+    border-radius: 6px;
+}
+
+.dashboardInsightsWrapper li > div:first-child {
+    margin-bottom: 0.5rem;
+}
+
+.dashboardInsightsWrapper strong {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.dashboardInsightsWrapper span {
+    opacity: 0.7;
+    font-size: 0.9rem;
+}
+
+.dashboardInsightsWrapper small {
+    font-size: 0.85rem;
+    opacity: 0.6;
+}
+
+/* Light mode overrides */
+:global(.light) .dashboardInviteFormWrapper > div,
+:global(.light) .dashboardInsightsWrapper > div {
+    border-color: #e0e0e0;
+}
+
+:global(.light) .dashboardInviteFormWrapper code {
+    border-color: #e0e0e0;
+}
+
+:global(.light) .dashboardInsightsWrapper li {
+    border-bottom-color: #e0e0e0;
+}
+
+:global(.light) .dashboardInsightsWrapper li:hover {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+/* Tablet breakpoint */
+@media (max-width: 1024px) {
+    .dashboardPageWrapper {
+        padding: 1.5rem;
+    }
+
+    .dashboardGridWrapper {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+
+/* Mobile breakpoint */
+@media (max-width: 768px) {
+    .dashboardPageWrapper {
+        padding: 1rem;
+    }
+
+    .dashboardPageWrapper h1 {
+        font-size: 1.75rem;
+    }
+
+    .dashboardPageWrapper > div:first-child p {
+        font-size: 1rem;
+    }
+
+    .dashboardGridWrapper {
+        gap: 1rem;
+    }
+
+    .dashboardInviteFormWrapper,
+    .dashboardInsightsWrapper {
+        gap: 1rem;
+    }
+
+    .dashboardInviteFormWrapper > div,
+    .dashboardInsightsWrapper > div {
+        padding: 1rem;
+    }
+
+    .dashboardInviteFormWrapper h2,
+    .dashboardInsightsWrapper h2 {
+        font-size: 1.1rem;
+    }
+
+    .dashboardInviteFormWrapper code {
+        font-size: 0.8rem;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .dashboardInsightsWrapper li {
+        padding: 0.75rem;
+    }
+}
+
+/* Small mobile breakpoint */
+@media (max-width: 480px) {
+    .dashboardPageWrapper {
+        padding: 0.75rem;
+    }
+
+    .dashboardPageWrapper h1 {
+        font-size: 1.5rem;
+    }
+
+    .dashboardInviteFormWrapper code {
+        font-size: 0.75rem;
+        word-break: break-all;
+    }
+}

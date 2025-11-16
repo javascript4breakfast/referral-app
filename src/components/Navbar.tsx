@@ -1,29 +1,34 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import ThemeToggle from './ThemeToggle';
+import { ActionButton } from '@adobe/react-spectrum';
 import SignOutButton from './SignOutButton';
+import styles from './styles/navbar.module.css';
 
 export default function Navbar() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const isAuthenticated = status === 'authenticated';
+  const router = useRouter();
+
+  const handleNavigate = (path: string) => {
+    router.push(path);
+  };
 
   return (
-    <nav>
-      <div>
-        <Link href="/">
-          <h1>Referral App</h1>
-        </Link>
-
-        <div>
-          <ThemeToggle />
-          
+    <nav className={styles.navbar}>
+      <div className={styles.container}>
+        <ActionButton isQuiet onPress={() => handleNavigate('/')}>
+          Referrly
+        </ActionButton>
+        <div className={styles.navLinks}>
           {isAuthenticated ? (
             <>
-              <Link href="/dashboard">
+              <ActionButton isQuiet onPress={() => handleNavigate('/dashboard')}>
                 Dashboard
-              </Link>
+              </ActionButton>
               <SignOutButton />
             </>
           ) : (
@@ -36,6 +41,7 @@ export default function Navbar() {
               </Link>
             </>
           )}
+          <ThemeToggle />
         </div>
       </div>
     </nav>

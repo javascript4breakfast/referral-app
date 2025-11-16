@@ -8,7 +8,7 @@ export default function SpectrumProviderWrapper({ children }: { children: React.
   const { theme } = useTheme();
   
   return (
-    <Provider theme={defaultTheme} colorScheme={theme}>
+    <Provider theme={defaultTheme} colorScheme={theme} minHeight="100vh">
       {children}
     </Provider>
   );

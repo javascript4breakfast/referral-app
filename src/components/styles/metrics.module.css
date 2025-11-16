@@ -1,0 +1,11 @@
+.metricsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.metricsStatsRow {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}

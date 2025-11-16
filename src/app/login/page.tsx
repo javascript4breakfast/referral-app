@@ -5,6 +5,7 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Form, TextField, Button } from '@adobe/react-spectrum';
+import styles from './login.module.css';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -40,50 +41,48 @@ export default function LoginPage() {
 
   return (
       <main>
-        <div>
+        <div className={styles.loginPageTitle}>
           <h1>Log In</h1>
           <p>Sign in to your account to access your dashboard.</p>
         </div>
 
-        {error && (
-          <div>
-            <p>{error}</p>
-          </div>
-        )}
-
-        <div>
+        <div className={styles.loginFormWrapper}>
+          {error && (
+            <div className={styles.loginMessage}>
+              <p>{error}</p>
+            </div>
+          )}
           <Form onSubmit={handleSubmit}>
-            <div>
-              <TextField
-                label="Email"
-                value={email}
-                onChange={(value) => setEmail(value)}
-                isDisabled={loading}
-              />
-            </div>
+            <TextField
+              label="Email"
+              value={email}
+              onChange={(value) => setEmail(value)}
+              isDisabled={loading}
+            />
 
-            <div>
-              <TextField
-                label="Password"
-                type="password"
-                value={password}
-                onChange={(value) => setPassword(value)}
-                isDisabled={loading}
-                minLength={6}
-              />
-            </div>
+            <TextField
+              label="Password"
+              type="password"
+              value={password}
+              onChange={(value) => setPassword(value)}
+              isDisabled={loading}
+              minLength={6}
+            />
             
-            <div>
-              <Button variant="cta" type="submit" isDisabled={loading}>
-                {loading ? 'Signing In...' : 'Log In'}
-              </Button>
+            <div className={styles.loginFormButton}>
+              <div>
+                <p>Don't have an account? <Link href="/signup">Sign up</Link></p>
+              </div>
+              <div>
+                <Button variant="cta" type="submit" isDisabled={loading}>
+                  {loading ? 'Signing In...' : 'Log In'}
+                </Button>
+              </div>
             </div>
           </Form>
         </div>
 
-        <div>
-          <p>Don't have an account? <Link href="/signup">Sign up</Link></p>
-        </div>
+       
       </main>
   );
 }

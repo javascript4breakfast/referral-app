@@ -7,13 +7,14 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "test": "vitest run",
     "test:ui": "vitest --ui",
     "prisma:studio": "prisma studio",
-    "db:reset": "rm -f prisma/dev.db prisma/dev.db-journal && pnpm prisma migrate deploy && pnpm prisma generate"
+    "db:reset": "rm -f prisma/dev.db prisma/dev.db-journal && pnpm prisma migrate deploy && pnpm prisma generate",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@adobe/react-spectrum": "^3.45.0",
@@ -25,6 +26,7 @@
     "next-auth": "^4.24.13",
     "react": "19.2.0",
     "react-dom": "19.2.0",
+    "resend": "^6.4.2",
     "uuid": "^13.0.0",
     "zod": "^4.1.12"
   },
