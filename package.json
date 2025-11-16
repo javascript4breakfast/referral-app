@@ -19,6 +19,8 @@
   "dependencies": {
     "@adobe/react-spectrum": "^3.45.0",
     "@auth/prisma-adapter": "^2.11.1",
+    "@libsql/client": "^0.15.15",
+    "@prisma/adapter-libsql": "^6.19.0",
     "@prisma/client": "^6.19.0",
     "bcrypt": "^6.0.0",
     "nanoid": "^5.1.6",
