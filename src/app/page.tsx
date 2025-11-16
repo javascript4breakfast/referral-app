@@ -25,7 +25,7 @@ export default function Home() {
             Build and grow your network with our powerful referral system
           </p>
           <p className={styles.homeDescription}>
-            Demo referral system built with Next.js, Prisma, and SQLite. 
+            Production-ready referral system built with Next.js, TypeScript, and PostgreSQL. 
             Create invites, track conversions, and manage your referrals effortlessly.
           </p>
         </div>
