@@ -7,6 +7,8 @@ generator client {
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
+  // Turso uses libsql:// protocol which is SQLite-compatible
+  // Local dev uses file:./prisma/dev.db
 }
 
 model User {
